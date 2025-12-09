@@ -25,7 +25,7 @@ This guide will walk you through publishing the package to npm and maintaining i
 Before publishing, make sure:
 
 - [ ] Package name is available (check on npmjs.com)
-- [ ] All code is tested and working
+- [ ] All code is tested and workingo
 - [ ] README.md is complete and accurate
 - [ ] package.json has correct information:
   - [ ] Package name

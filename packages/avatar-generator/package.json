@@ -1,5 +1,5 @@
 {
-  "name": "@avatar-generator/react",
+  "name": "@aryankarma/simple-avatar-generator",
   "version": "1.0.0",
   "description": "A React component for generating deterministic SVG avatars from email addresses",
   "main": "./dist/index.js",
@@ -17,6 +17,7 @@
       }
     }
   },
+  "publishConfig": { "access": "public" },
   "files": [
     "dist"
   ],

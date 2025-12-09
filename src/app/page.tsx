@@ -1,7 +1,142 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Avatar } from '@aryankarma/simple-avatar-generator';
 import { getAvatarUrl } from '@/lib/api';
+
+// Example emails for the hero section
+const exampleEmails = [
+  'alice.johnson@example.com',
+  'bob.smith@company.com',
+  'charlie.brown@email.com',
+  'diana.prince@hero.com',
+  'emma.watson@star.com',
+  'frank.miller@design.com',
+  'grace.hopper@tech.com',
+  'henry.ford@industry.com',
+];
+
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  },
+};
+
+const avatarVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.4,
+      ease: 'easeOut',
+    },
+  },
+  hover: {
+    scale: 1.1,
+    transition: {
+      duration: 0.2,
+    },
+  },
+};
+
+const codeExamples = [
+  {
+    title: 'Basic Usage',
+    description: 'Simple avatar generation with just an email',
+    code: `import { Avatar } from '@aryankarma/simple-avatar-generator';
+
+function UserProfile({ email }) {
+  return <Avatar email={email} />;
+}`,
+  },
+  {
+    title: 'Custom Size',
+    description: 'Control the avatar size',
+    code: `import { Avatar } from '@aryankarma/simple-avatar-generator';
+
+function UserAvatar({ email }) {
+  return (
+    <Avatar 
+      email={email} 
+      size={150}
+    />
+  );
+}`,
+  },
+  {
+    title: 'With Styling',
+    description: 'Add custom CSS classes and styles',
+    code: `import { Avatar } from '@aryankarma/simple-avatar-generator';
+
+function StyledAvatar({ email }) {
+  return (
+    <Avatar 
+      email={email}
+      size={100}
+      className="rounded-full border-2 border-blue-500"
+      style={{ boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
+    />
+  );
+}`,
+  },
+  {
+    title: 'In a List',
+    description: 'Display multiple avatars',
+    code: `import { Avatar } from '@aryankarma/simple-avatar-generator';
+
+function UserList({ users }) {
+  return (
+    <div className="flex gap-4">
+      {users.map(user => (
+        <Avatar 
+          key={user.email}
+          email={user.email}
+          size={50}
+          className="rounded-full"
+        />
+      ))}
+    </div>
+  );
+}`,
+  },
+  {
+    title: 'Utility Functions',
+    description: 'Use utility functions for custom implementations',
+    code: `import { 
+  generateAvatarSVG, 
+  generateAvatarDataURL 
+} from '@aryankarma/simple-avatar-generator';
+
+// Get SVG string
+const svg = generateAvatarSVG('user@example.com', 200);
+
+// Get data URL
+const dataUrl = generateAvatarDataURL('user@example.com', 200);
+
+// Use in custom component
+<img src={dataUrl} alt="Avatar" />`,
+  },
+];
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -9,6 +144,7 @@ export default function Home() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const handleGenerateAvatar = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +154,6 @@ export default function Home() {
       return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Please enter a valid email address');
@@ -29,7 +164,6 @@ export default function Home() {
     setLoading(true);
 
     try {
-      // Generate avatar URL - the backend will generate it
       const url = getAvatarUrl(email, avatarSize);
       setAvatarUrl(url);
     } catch (err) {
@@ -61,23 +195,260 @@ export default function Home() {
       });
   };
 
+  const copyToClipboard = (text: string, index: number) => {
+    navigator.clipboard.writeText(text);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 2000);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-4xl flex-col gap-8 py-16 px-8 bg-white dark:bg-black">
-        {/* Header */}
-        <div className="flex flex-col gap-4">
-          <h1 className="text-4xl font-bold text-black dark:text-zinc-50">
-            Avatar Generator
-          </h1>
-          <p className="text-lg text-zinc-600 dark:text-zinc-400">
-            Generate unique avatars from email addresses
-          </p>
+    <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
+      {/* Hero Section */}
+      <section className="w-full bg-gradient-to-br from-zinc-100 via-zinc-50 to-zinc-200 dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-800 py-20 px-8 relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            className="absolute top-20 left-10 w-72 h-72 bg-blue-300/20 dark:bg-blue-500/10 rounded-full blur-3xl"
+            animate={{
+              x: [0, 100, 0],
+              y: [0, 50, 0],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+          />
+          <motion.div
+            className="absolute bottom-20 right-10 w-96 h-96 bg-purple-300/20 dark:bg-purple-500/10 rounded-full blur-3xl"
+            animate={{
+              x: [0, -100, 0],
+              y: [0, -50, 0],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+          />
         </div>
 
+        <div className="max-w-6xl mx-auto relative z-10">
+          <motion.div
+            className="text-center mb-12"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+          >
+            <motion.h1
+              variants={itemVariants}
+              className="text-5xl md:text-7xl font-bold text-black dark:text-zinc-50 mb-4 bg-clip-text"
+            >
+              Avatar Generator
+            </motion.h1>
+            <motion.p
+              variants={itemVariants}
+              className="text-xl md:text-2xl text-zinc-700 dark:text-zinc-300 mb-2"
+            >
+              Generate unique, deterministic avatars from email addresses
+            </motion.p>
+            <motion.p
+              variants={itemVariants}
+              className="text-lg text-zinc-600 dark:text-zinc-400"
+            >
+              Powered by{' '}
+              <span className="font-mono font-semibold text-zinc-900 dark:text-zinc-100 bg-zinc-200 dark:bg-zinc-800 px-2 py-1 rounded">
+                @aryankarma/simple-avatar-generator
+              </span>
+            </motion.p>
+          </motion.div>
+
+          {/* Example Avatars Grid */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={containerVariants}
+            className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-zinc-200 dark:border-zinc-800"
+          >
+            <motion.h2
+              variants={itemVariants}
+              className="text-2xl font-semibold text-center mb-8 text-black dark:text-zinc-50"
+            >
+              Example Avatars
+            </motion.h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-6 justify-items-center">
+              {exampleEmails.map((exampleEmail, index) => (
+                <motion.div
+                  key={index}
+                  variants={avatarVariants}
+                  whileHover="hover"
+                  className="flex flex-col items-center gap-2 cursor-pointer"
+                >
+                  <motion.div
+                    className="rounded-full border-2 border-zinc-200 dark:border-zinc-700 p-1 hover:border-zinc-400 dark:hover:border-zinc-500 transition-colors"
+                    whileHover={{ borderColor: 'rgb(59 130 246)' }}
+                  >
+                    <Avatar
+                      email={exampleEmail}
+                      size={80}
+                      className="rounded-full"
+                    />
+                  </motion.div>
+                  <p className="text-xs text-center text-zinc-600 dark:text-zinc-400 font-mono max-w-[100px] truncate">
+                    {exampleEmail.split('@')[0]}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Feature Highlights */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={containerVariants}
+            className="grid md:grid-cols-3 gap-6 mt-12"
+          >
+            {[
+              {
+                emoji: '🎨',
+                title: 'Unique Designs',
+                description: 'Each email generates a unique, colorful avatar',
+              },
+              {
+                emoji: '🔄',
+                title: 'Deterministic',
+                description: 'Same email always produces the same avatar',
+              },
+              {
+                emoji: '📦',
+                title: 'Easy to Use',
+                description: 'Simple React component, zero configuration',
+              },
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                whileHover={{ y: -5, scale: 1.02 }}
+                className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm rounded-xl p-6 border border-zinc-200 dark:border-zinc-800 text-center shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <motion.div
+                  className="text-4xl mb-3"
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatDelay: 3,
+                  }}
+                >
+                  {feature.emoji}
+                </motion.div>
+                <h3 className="font-semibold text-lg text-black dark:text-zinc-50 mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <main className="flex-1 w-full max-w-5xl mx-auto flex flex-col gap-12 py-16 px-8">
+        {/* Installation Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white shadow-xl"
+        >
+          <h2 className="text-3xl font-bold mb-4">Installation</h2>
+          <div className="bg-black/30 rounded-lg p-4 mb-4 backdrop-blur-sm">
+            <div className="flex items-center justify-between">
+              <code className="text-green-300 font-mono text-lg">
+                npm install @aryankarma/simple-avatar-generator
+              </code>
+              <button
+                onClick={() => copyToClipboard('npm install @aryankarma/simple-avatar-generator', -1)}
+                className="ml-4 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-md transition-colors"
+              >
+                {copiedIndex === -1 ? '✓ Copied' : 'Copy'}
+              </button>
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <a
+              href="https://www.npmjs.com/package/@aryankarma/simple-avatar-generator"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-white text-blue-600 px-6 py-3 font-semibold hover:bg-blue-50 transition-colors shadow-lg"
+            >
+              <span>📦</span>
+              <span>View on npm</span>
+            </a>
+          </div>
+        </motion.section>
+
+        {/* Code Examples Section */}
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="text-3xl font-bold text-black dark:text-zinc-50 mb-8 text-center">
+            Code Examples
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {codeExamples.map((example, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <h3 className="text-xl font-semibold text-black dark:text-zinc-50 mb-2">
+                  {example.title}
+                </h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
+                  {example.description}
+                </p>
+                <div className="relative">
+                  <div className="bg-zinc-900 dark:bg-zinc-950 rounded-lg p-4 overflow-x-auto">
+                    <pre className="text-sm text-zinc-100 font-mono">
+                      <code>{example.code}</code>
+                    </pre>
+                  </div>
+                  <button
+                    onClick={() => copyToClipboard(example.code, index)}
+                    className="absolute top-2 right-2 px-3 py-1 bg-zinc-700 hover:bg-zinc-600 text-white text-xs rounded transition-colors"
+                  >
+                    {copiedIndex === index ? '✓ Copied' : 'Copy'}
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
         {/* Input Form */}
-        <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-6">
-          <h2 className="text-2xl font-semibold mb-4 text-black dark:text-zinc-50">
-            Generate Avatar
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 bg-white dark:bg-black shadow-lg"
+        >
+          <h2 className="text-2xl font-semibold mb-6 text-black dark:text-zinc-50">
+            Try It Out
           </h2>
           <form onSubmit={handleGenerateAvatar} className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
@@ -91,7 +462,7 @@ export default function Home() {
                   setEmail(e.target.value);
                   setError(null);
                 }}
-                className="rounded-md border border-zinc-300 dark:border-zinc-700 px-4 py-2 bg-white dark:bg-zinc-900 text-black dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+                className="rounded-lg border border-zinc-300 dark:border-zinc-700 px-4 py-3 bg-white dark:bg-zinc-900 text-black dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                 placeholder="example@email.com"
                 required
               />
@@ -111,35 +482,49 @@ export default function Home() {
                 }}
                 min={50}
                 max={1000}
-                className="rounded-md border border-zinc-300 dark:border-zinc-700 px-4 py-2 bg-white dark:bg-zinc-900 text-black dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+                className="rounded-lg border border-zinc-300 dark:border-zinc-700 px-4 py-3 bg-white dark:bg-zinc-900 text-black dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               />
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 Size must be between 50 and 1000 pixels
               </p>
             </div>
             {error && (
-              <div className="rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-2">
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3"
+              >
                 <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-              </div>
+              </motion.div>
             )}
             <button
               type="submit"
               disabled={loading}
-              className="rounded-md bg-zinc-900 dark:bg-zinc-100 px-6 py-2 text-white dark:text-black font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 text-white font-semibold hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
             >
               {loading ? 'Generating...' : 'Generate Avatar'}
             </button>
           </form>
-        </div>
+        </motion.div>
 
         {/* Avatar Display */}
         {avatarUrl && (
-          <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-black dark:text-zinc-50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 bg-white dark:bg-black shadow-lg"
+          >
+            <h2 className="text-2xl font-semibold mb-6 text-black dark:text-zinc-50">
               Your Avatar
             </h2>
             <div className="flex flex-col items-center gap-6">
-              <div className="rounded-lg border-2 border-zinc-200 dark:border-zinc-800 p-4 bg-zinc-50 dark:bg-zinc-900">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: 'spring' }}
+                className="rounded-xl border-2 border-zinc-200 dark:border-zinc-800 p-4 bg-zinc-50 dark:bg-zinc-900"
+              >
                 <img
                   src={avatarUrl}
                   alt={`Avatar for ${email}`}
@@ -147,7 +532,7 @@ export default function Home() {
                   width={avatarSize}
                   height={avatarSize}
                 />
-              </div>
+              </motion.div>
               <div className="flex flex-col gap-2 items-center">
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
                   Email: <span className="font-mono text-black dark:text-zinc-50">{email}</span>
@@ -157,27 +542,72 @@ export default function Home() {
                 </p>
                 <button
                   onClick={handleDownload}
-                  className="rounded-md bg-blue-600 px-6 py-2 text-white font-medium hover:bg-blue-700 transition-colors mt-2"
+                  className="rounded-lg bg-blue-600 px-6 py-2 text-white font-medium hover:bg-blue-700 transition-colors mt-2 shadow-md"
                 >
                   Download SVG
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
 
-        {/* Info Section */}
-        <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-6">
-          <h3 className="text-lg font-semibold mb-2 text-black dark:text-zinc-50">
-            How it works
-          </h3>
-          <ul className="list-disc list-inside space-y-2 text-zinc-600 dark:text-zinc-400">
-            <li>Enter an email address to generate a unique avatar</li>
-            <li>Each email produces a deterministic avatar (same email = same avatar)</li>
-            <li>Avatars include initials and colorful patterns</li>
-            <li>Download as SVG for scalable use</li>
-          </ul>
-        </div>
+        {/* API Documentation */}
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 bg-white dark:bg-black shadow-lg"
+        >
+          <h2 className="text-2xl font-semibold mb-6 text-black dark:text-zinc-50">
+            API Reference
+          </h2>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-black dark:text-zinc-50 mb-2">
+                Avatar Component Props
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-zinc-200 dark:border-zinc-800">
+                      <th className="text-left py-2 px-4 text-zinc-700 dark:text-zinc-300">Prop</th>
+                      <th className="text-left py-2 px-4 text-zinc-700 dark:text-zinc-300">Type</th>
+                      <th className="text-left py-2 px-4 text-zinc-700 dark:text-zinc-300">Default</th>
+                      <th className="text-left py-2 px-4 text-zinc-700 dark:text-zinc-300">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-zinc-100 dark:border-zinc-900">
+                      <td className="py-2 px-4 font-mono text-blue-600 dark:text-blue-400">email</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">string</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">-</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">Email address (required)</td>
+                    </tr>
+                    <tr className="border-b border-zinc-100 dark:border-zinc-900">
+                      <td className="py-2 px-4 font-mono text-blue-600 dark:text-blue-400">size</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">number</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">200</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">Avatar size in pixels</td>
+                    </tr>
+                    <tr className="border-b border-zinc-100 dark:border-zinc-900">
+                      <td className="py-2 px-4 font-mono text-blue-600 dark:text-blue-400">className</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">string</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">''</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">CSS class name</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-4 font-mono text-blue-600 dark:text-blue-400">style</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">CSSProperties</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">{}</td>
+                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">Inline styles</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </motion.section>
       </main>
     </div>
   );
