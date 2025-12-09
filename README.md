@@ -2,6 +2,11 @@
 
 A Next.js application that generates unique, deterministic SVG avatars from email addresses. Each email address produces a consistent avatar with initials and colorful patterns.
 
+This project includes:
+- 🌐 **Web Application** - Full-featured Next.js app with UI
+- 🔌 **REST API** - HTTP endpoint for generating avatars
+- 📦 **React Package** - Reusable React component (`@avatar-generator/react`)
+
 ## Features
 
 - 🎨 Generate unique avatars from email addresses
@@ -9,6 +14,7 @@ A Next.js application that generates unique, deterministic SVG avatars from emai
 - 📐 Customizable avatar size (50-1000px)
 - 💾 Download avatars as SVG files
 - 🌐 RESTful API for programmatic access
+- 📦 NPM package for React applications
 - 🎯 Responsive design with dark mode support
 
 ## Getting Started
@@ -192,10 +198,64 @@ async function getAvatarSVG(email, size = 200) {
 - **Patterns:** Includes decorative patterns for visual interest
 - **Scalable:** SVG format ensures crisp display at any size
 
+## React Package
+
+This project includes a reusable React component package that can be installed and used in any React application.
+
+### Installation
+
+```bash
+npm install @avatar-generator/react
+# or
+yarn add @avatar-generator/react
+# or
+pnpm add @avatar-generator/react
+```
+
+### Usage
+
+```tsx
+import { Avatar } from '@avatar-generator/react';
+
+function App() {
+  return <Avatar email="user@example.com" size={200} />;
+}
+```
+
+See the [package README](./packages/avatar-generator/README.md) for complete documentation.
+
+### Building the Package
+
+To build the React package locally:
+
+```bash
+cd packages/avatar-generator
+npm install
+npm run build
+```
+
+### Publishing the Package
+
+To publish the package to npm:
+
+```bash
+cd packages/avatar-generator
+npm login
+npm publish --access public
+```
+
 ## Project Structure
 
 ```
 avatar/
+├── packages/
+│   └── avatar-generator/         # React component package
+│       ├── src/
+│       │   ├── Avatar.tsx        # React component
+│       │   ├── avatar-generator.ts # Core logic
+│       │   └── index.ts          # Package exports
+│       ├── dist/                 # Built package files
+│       └── package.json
 ├── src/
 │   ├── app/
 │   │   ├── api/
