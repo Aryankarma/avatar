@@ -35,8 +35,16 @@
     "profile",
     "picture"
   ],
-  "author": "",
+  "author": "Aryan Karma <aryankarma.pro>",
   "license": "MIT",
+  "homepage": "https://avatar.aryankarma.pro",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aryankarma/avatar.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aryankarma/avatar/issues"
+  },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
@@ -46,9 +54,5 @@
     "react": "^19.2.1",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
-  },
-  "repository": {
-    "type": "git",
-    "url": ""
   }
 }
