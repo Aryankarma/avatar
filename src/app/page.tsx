@@ -558,53 +558,55 @@ export default function Home() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-8 bg-white dark:bg-black shadow-lg"
+          className="rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6 md:p-8 bg-white dark:bg-black shadow-lg"
         >
-          <h2 className="text-2xl font-semibold mb-6 text-black dark:text-zinc-50">
+          <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-black dark:text-zinc-50">
             API Reference
           </h2>
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-black dark:text-zinc-50 mb-2">
+              <h3 className="text-base sm:text-lg font-semibold text-black dark:text-zinc-50 mb-2 sm:mb-3">
                 Avatar Component Props
               </h3>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-zinc-200 dark:border-zinc-800">
-                      <th className="text-left py-2 px-4 text-zinc-700 dark:text-zinc-300">Prop</th>
-                      <th className="text-left py-2 px-4 text-zinc-700 dark:text-zinc-300">Type</th>
-                      <th className="text-left py-2 px-4 text-zinc-700 dark:text-zinc-300">Default</th>
-                      <th className="text-left py-2 px-4 text-zinc-700 dark:text-zinc-300">Description</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-b border-zinc-100 dark:border-zinc-900">
-                      <td className="py-2 px-4 font-mono text-blue-600 dark:text-blue-400">email</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">string</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">-</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">Email address (required)</td>
-                    </tr>
-                    <tr className="border-b border-zinc-100 dark:border-zinc-900">
-                      <td className="py-2 px-4 font-mono text-blue-600 dark:text-blue-400">size</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">number</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">200</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">Avatar size in pixels</td>
-                    </tr>
-                    <tr className="border-b border-zinc-100 dark:border-zinc-900">
-                      <td className="py-2 px-4 font-mono text-blue-600 dark:text-blue-400">className</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">string</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">''</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">CSS class name</td>
-                    </tr>
-                    <tr>
-                      <td className="py-2 px-4 font-mono text-blue-600 dark:text-blue-400">style</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">CSSProperties</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">{}</td>
-                      <td className="py-2 px-4 text-zinc-600 dark:text-zinc-400">Inline styles</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="overflow-x-auto -mx-4 sm:mx-0">
+                <div className="inline-block min-w-full align-middle">
+                  <table className="w-full text-xs sm:text-sm">
+                    <thead>
+                      <tr className="border-b border-zinc-200 dark:border-zinc-800">
+                        <th className="text-left py-2 px-2 sm:px-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">Prop</th>
+                        <th className="text-left py-2 px-2 sm:px-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">Type</th>
+                        <th className="text-left py-2 px-2 sm:px-4 text-zinc-700 dark:text-zinc-300 whitespace-nowrap">Default</th>
+                        <th className="text-left py-2 px-2 sm:px-4 text-zinc-700 dark:text-zinc-300">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-zinc-100 dark:border-zinc-900">
+                        <td className="py-2 px-2 sm:px-4 font-mono text-blue-600 dark:text-blue-400 text-xs sm:text-sm whitespace-nowrap">email</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm whitespace-nowrap">string</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">-</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">Email address (required)</td>
+                      </tr>
+                      <tr className="border-b border-zinc-100 dark:border-zinc-900">
+                        <td className="py-2 px-2 sm:px-4 font-mono text-blue-600 dark:text-blue-400 text-xs sm:text-sm whitespace-nowrap">size</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm whitespace-nowrap">number</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">200</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">Avatar size in pixels</td>
+                      </tr>
+                      <tr className="border-b border-zinc-100 dark:border-zinc-900">
+                        <td className="py-2 px-2 sm:px-4 font-mono text-blue-600 dark:text-blue-400 text-xs sm:text-sm whitespace-nowrap">className</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm whitespace-nowrap">string</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">''</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">CSS class name</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-2 sm:px-4 font-mono text-blue-600 dark:text-blue-400 text-xs sm:text-sm whitespace-nowrap">style</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm whitespace-nowrap">CSSProperties</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">{}</td>
+                        <td className="py-2 px-2 sm:px-4 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">Inline styles</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
